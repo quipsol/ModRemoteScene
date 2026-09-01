@@ -24,7 +24,7 @@
 
     <ItemGroup>
         <Content Include="local.props.example" />
-        <Content Include="project.godot"/>
+        <Content Include="project.godot" />
         <AdditionalFiles Include="ModRemoteScene/localization/**/*.json"/> <!-- Used by analyzer -->
 
         <EmbeddedResource Remove="ModRemoteScene/**"/>

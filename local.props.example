@@ -1,0 +1,22 @@
+<Project>
+    <!--    Example on how local.props may look like    -->
+    <PropertyGroup>
+        <GodotRoot>C:\Programs\Megadot</GodotRoot>
+        <GodotPath>$(GodotRoot)\MegaDot_v4.5.1-stable_mono_win64.exe</GodotPath>
+        <AssetSourcePath>D:\StS2-Decomp</AssetSourcePath>
+        <SteamLibraryPath>C:\Steam\steamapps</SteamLibraryPath>
+        <Sts2WorkshopDir>$(SteamLibraryPath)\workshop\content\2868840</Sts2WorkshopDir>
+
+        <!-- Set to true to build against your local BaseLib or the Workshop copy instead of Nuget version-->
+        <!-- Local takes priority over Workshop-->
+        <UseLocalBaseLib>false</UseLocalBaseLib>
+        <UseWorkshopBaseLib>false</UseWorkshopBaseLib>
+
+        <LocalBaseLibPath>$(ModsPath)\BaseLib\BaseLib.dll</LocalBaseLibPath>
+        <WorkshopBaseLibPath>$(Sts2WorkshopDir)/3737335127/BaseLib/BaseLib.dll</WorkshopBaseLibPath>
+
+        <!-- Should the files be copies into the mods folder the Godot editor will read?    -->
+        <CopyToGodotMods>true</CopyToGodotMods>
+
+    </PropertyGroup>
+</Project>

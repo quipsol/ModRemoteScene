@@ -1,0 +1,189 @@
+<Project>
+    <PropertyGroup Condition="'$(IsPublishAll)' != 'true'">
+        <ImplicitUsings>true</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <DefaultItemExcludes>
+            addons/**;
+            animations/**;
+            banks/**;
+            debug_audio/**;
+            fonts/**;
+            images/**;
+            localization/**;
+            materials/**;
+            models/**;
+            scenes/**
+            shaders/**;
+            src/**;
+            themes/**;
+            --*;
+            default_bus_layout.tres;
+
+            packages/**;
+            RiderTestRunner/**;
+            System/**;
+            steam/**;
+        </DefaultItemExcludes>
+        <AppOutputBase>$(MSBuildProjectDirectory)\</AppOutputBase>
+        <AssemblyVersion>0.0.20.0</AssemblyVersion>
+        <FileVersion>0.0.20.0</FileVersion>
+        <Version>0.0.20</Version>
+        <NoWarn>$(NoWarn);MSB3270;CS0436</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsPublishAll)' != 'true'">
+        <UseLocalBaseLib Condition="'$(UseLocalBaseLib)' == ''">false</UseLocalBaseLib>
+    </PropertyGroup>
+
+
+    <UsingTask TaskName="CreateSymlink" TaskFactory="RoslynCodeTaskFactory"
+               AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+        <ParameterGroup>
+            <LinkPath ParameterType="System.String" Required="true"/>
+            <TargetPath ParameterType="System.String" Required="true"/>
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System.IO"/>
+            <Using Namespace="System.Runtime.InteropServices"/>
+            <Code Type="Fragment" Language="cs">
+                <![CDATA[
+    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    static extern int CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, int dwFlags);
+
+    if (!Directory.Exists(TargetPath))
+        Log.LogMessage(MessageImportance.High, $"NO SOURCE: {TargetPath}");
+    else if (!Directory.Exists(LinkPath) && !File.Exists(LinkPath))
+    {
+        int ok = CreateSymbolicLink(LinkPath, TargetPath, 3);
+        if (ok != 0)
+            Log.LogMessage(MessageImportance.High, $"LINKED: {LinkPath} -> {TargetPath}");
+        else
+            Log.LogError($"FAILED (error {Marshal.GetLastWin32Error()}): {LinkPath}");
+    }
+]]>
+            </Code>
+        </Task>
+    </UsingTask>
+
+    <PropertyGroup Condition="'$(IsPublishAll)' != 'true'">
+        <AssetSourcePath Condition="'$(AssetSourcePath)' == ''">$(MSBuildThisFileDirectory)Slay the Spire 2</AssetSourcePath>
+    </PropertyGroup>
+
+    <ItemGroup Condition="'$(IsPublishAll)' != 'true'">
+        <SymlinkFolders Include="src;images;fonts;localization;materials;models;scenes;animations;banks;debug_audio;shaders;themes;addons"/>
+    </ItemGroup>
+
+    <Target Name="CreateAssetSymlinks" BeforeTargets="Build"
+            Condition="'$(IsPublishAll)' != 'true' and '$(AssetSourcePath)' != '' and Exists('$(AssetSourcePath)')">
+        <CreateSymlink
+                LinkPath="$(MSBuildProjectDirectory)\%(SymlinkFolders.Identity)"
+                TargetPath="$(AssetSourcePath)\%(SymlinkFolders.Identity)"/>
+    </Target>
+
+
+
+    <PropertyGroup Condition="'$(IsPublishAll)' != 'true' and '$(Configuration)' == 'Debug'">
+        <Optimize>false</Optimize>
+        <DebugType>portable</DebugType>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsPublishAll)' != 'true' and '$(Configuration)' == 'Release'">
+        <Optimize>true</Optimize>
+        <DebugType>none</DebugType>
+        <PathMap>$(AppOutputBase)=.\</PathMap>
+    </PropertyGroup>
+
+    <Import Project="$(MSBuildProjectDirectory)\local.props" Condition="Exists('$(MSBuildProjectDirectory)\local.props')"/>
+
+    <!-- OS Detection -->
+    <PropertyGroup Condition="'$(IsPublishAll)' != 'true'">
+        <IsWindows Condition="$([MSBuild]::IsOSPlatform('Windows'))">true</IsWindows>
+        <IsLinux Condition="$([MSBuild]::IsOSPlatform('Linux'))">true</IsLinux>
+        <IsOSX Condition="$([MSBuild]::IsOSPlatform('OSX'))">true</IsOSX>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsPublishAll)' != 'true' and '$(IsWindows)' == 'true'">
+        <SteamLibraryPath Condition="'$(SteamLibraryPath)' == ''">C:/Program Files (x86)/Steam/steamapps</SteamLibraryPath>
+        <Sts2Path Condition="'$(Sts2Path)' == ''">$(SteamLibraryPath)/common/Slay the Spire 2</Sts2Path>
+        <ModsPath Condition="'$(ModsPath)' == ''">$(Sts2Path)/mods/</ModsPath>
+        <Sts2DataDir Condition="'$(Sts2DataDir)' == ''">$(Sts2Path)/data_sts2_windows_x86_64</Sts2DataDir>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsPublishAll)' != 'true' and '$(IsLinux)' == 'true'">
+        <SteamLibraryPath Condition="'$(SteamLibraryPath)' == ''">$(HOME)/.local/share/Steam/steamapps</SteamLibraryPath>
+        <GodotPath Condition="'$(GodotPath)' == ''">$(SteamLibraryPath)/common/Godot Engine/godot.x11.opt.tools.64</GodotPath>
+        <Sts2Path Condition="'$(Sts2Path)' == ''">$(SteamLibraryPath)/common/Slay the Spire 2</Sts2Path>
+        <ModsPath Condition="'$(ModsPath)' == ''">$(Sts2Path)/mods/</ModsPath>
+        <Sts2DataDir Condition="'$(Sts2DataDir)' == ''">$(Sts2Path)/data_sts2_linuxbsd_x86_64</Sts2DataDir>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(IsPublishAll)' != 'true' and '$(IsOSX)' == 'true'">
+        <SteamLibraryPath Condition="'$(SteamLibraryPath)' == ''">$(HOME)/Library/Application Support/Steam/steamapps</SteamLibraryPath>
+        <GodotPath Condition="'$(GodotPath)' == ''">$(HOME)/Applications/Godot_mono.app/Contents/MacOS/Godot</GodotPath>
+        <Sts2Path Condition="'$(Sts2Path)' == ''">$(SteamLibraryPath)/common/Slay the Spire 2</Sts2Path>
+        <ModsPath Condition="'$(ModsPath)' == ''">$(Sts2Path)/SlayTheSpire2.app/Contents/MacOS/mods/</ModsPath>
+        <Sts2DataDir Condition="'$(Sts2DataDir)' == ''">$(Sts2Path)/SlayTheSpire2.app/Contents/Resources/data_sts2_macos_x86_64</Sts2DataDir>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!--    To run the game properly in editor, these DLLs must be inside ".godot/mono/temp/bin/Debug".   -->
+        <!--    However we don't need them when we are building for the actual game.   -->
+        <Reference Include="Sentry">
+            <HintPath>$(Sts2DataDir)/Sentry.dll</HintPath>
+            <Private Condition="'$(Configuration)' == 'Debug'">true</Private>
+            <Private Condition="'$(Configuration)' != 'Debug'">false</Private>
+        </Reference>
+        <Reference Include="0Harmony">
+            <HintPath>$(Sts2DataDir)/0Harmony.dll</HintPath>
+            <Private Condition="'$(Configuration)' == 'Debug'">true</Private>
+            <Private Condition="'$(Configuration)' != 'Debug'">false</Private>
+        </Reference>
+        <Reference Include="JetBrains.Annotations">
+            <HintPath>$(Sts2DataDir)/JetBrains.Annotations.dll</HintPath>
+            <Private Condition="'$(Configuration)' == 'Debug'">true</Private>
+            <Private Condition="'$(Configuration)' != 'Debug'">false</Private>
+        </Reference>
+        <Reference Include="MonoMod.Backports">
+            <HintPath>$(Sts2DataDir)/MonoMod.Backports.dll</HintPath>
+            <Private Condition="'$(Configuration)' == 'Debug'">true</Private>
+            <Private Condition="'$(Configuration)' != 'Debug'">false</Private>
+        </Reference>
+        <Reference Include="MonoMod.ILHelpers">
+            <HintPath>$(Sts2DataDir)/MonoMod.ILHelpers.dll</HintPath>
+            <Private Condition="'$(Configuration)' == 'Debug'">true</Private>
+            <Private Condition="'$(Configuration)' != 'Debug'">false</Private>
+        </Reference>
+        <Reference Include="sts2">
+            <HintPath>$(Sts2DataDir)/sts2.dll</HintPath>
+            <Private Condition="'$(Configuration)' == 'Debug'">true</Private>
+            <Private Condition="'$(Configuration)' != 'Debug'">false</Private>
+        </Reference>
+<!--        <Reference Include="SmartFormat">-->
+<!--            <HintPath>$(Sts2DataDir)/SmartFormat.dll</HintPath>-->
+<!--        </Reference>-->
+<!--        <Reference Include="Steamworks.NET">-->
+<!--            <HintPath>$(Sts2DataDir)/Steamworks.NET.dll</HintPath>-->
+<!--        </Reference>-->
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(UseLocalBaseLib)' == 'true'">
+        <Reference Include="BaseLib">
+            <HintPath>$(LocalBaseLibPath)</HintPath>
+            <Private>true</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup Condition="'$(UseLocalBaseLib)' != 'true' and '$(UseWorkshopBaseLib)' == 'true' and Exists('$(Sts2WorkshopDir)')">
+        <Reference Include="BaseLib">
+            <HintPath>$(WorkshopBaseLibPath)</HintPath>
+            <Private>true</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup Condition="'$(UseLocalBaseLib)' != 'true' and '$(UseWorkshopBaseLib)' != 'true'">
+        <PackageReference Include="Alchyr.Sts2.BaseLib" Version="*" PrivateAssets="All"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Alchyr.Sts2.ModAnalyzers" Version="*"/>
+    </ItemGroup>
+
+</Project>

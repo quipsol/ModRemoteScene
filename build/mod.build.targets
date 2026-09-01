@@ -1,0 +1,56 @@
+<Project>
+    <PropertyGroup>
+        <GodotModsPath>$(GodotRoot)\mods</GodotModsPath>
+        <ModOutputFolder Condition="'$(ModOutputFolder)' == ''">$(MSBuildProjectName)</ModOutputFolder>
+        <ModAssetFolder Condition="'$(ModAssetFolder)' == ''">$(MSBuildProjectName)</ModAssetFolder>
+    </PropertyGroup>
+
+    <Target Name="CheckDependencyPaths">
+        <Error Text=" Slay the Spire 2 data not found at path '$(Sts2DataDir)'" Condition="'$(Sts2DataDir)' == '' or !Exists('$(Sts2DataDir)')" />
+    </Target>
+    
+    <Target Name="CopyToStsModsFolderOnBuild" AfterTargets="PostBuildEvent"
+            Condition="Exists('$(MSBuildProjectName).json')">
+        <Message Text="Copying .dll and manifest to the games mods folder." Importance="high"/>
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)$(ModOutputFolder)/"/>
+        <Copy SourceFiles="$(MSBuildProjectName).json" DestinationFolder="$(ModsPath)$(ModOutputFolder)/"/>
+        <Copy SourceFiles="$(TargetDir)$(TargetName).pdb"
+              DestinationFolder="$(ModsPath)$(ModOutputFolder)/"
+              Condition="Exists('$(TargetDir)$(TargetName).pdb')"/>
+    </Target>
+    
+    <Target Name="CopyToGodotModsFolderOnBuild" AfterTargets="PostBuildEvent"
+            Condition="Exists('$(MSBuildProjectName).json') and '$(CopyToGodotMods)' == 'true'">
+        <Message Text="Copying .dll and manifest to the Godot mods folder." Importance="high"/>
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(GodotModsPath)/$(ModOutputFolder)/"/>
+        <Copy SourceFiles="$(MSBuildProjectName).json" DestinationFolder="$(GodotModsPath)/$(ModOutputFolder)/"/>
+        <Copy SourceFiles="$(TargetDir)$(TargetName).pdb"
+              DestinationFolder="$(GodotModsPath)/$(ModOutputFolder)/"
+              Condition="Exists('$(TargetDir)$(TargetName).pdb')"/>
+    </Target>
+
+    <Target Name="GodotImport" BeforeTargets="GodotPublish"
+            Condition="'$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(SkipGodotImport)' != 'true'">
+        <Exec Command="&quot;$(GodotPath)&quot; --headless --audio-driver Dummy --path &quot;$(MSBuildProjectDirectory)&quot; --import --quit --extra-args --no-window"
+              EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1;Configuration=$(Configuration)"
+              IgnoreExitCode="true"
+              IgnoreStandardErrorWarningFormat="true"/>
+    </Target>
+
+    <Target Name="GodotPublish" AfterTargets="Publish"
+            Condition="Exists('$(MSBuildProjectName).json') and '$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(IsInnerGodotExport)' != 'true'">
+        <Message Text="--- RUNNING CUSTOM MOD PACKER FOR: '$(ModAssetFolder)' ---" Importance="high"/>
+        <Exec Command="&quot;$(GodotPath)&quot; --headless --audio-driver Dummy --path &quot;$(MSBuildProjectDirectory)&quot; -s build/pack_mod.gd -- &quot;$(ModsPath)$(ModOutputFolder)\$(MSBuildProjectName).pck&quot; &quot;$(ModAssetFolder)&quot;"
+              EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1;Configuration=$(Configuration)"
+              IgnoreExitCode="false"
+              IgnoreStandardErrorWarningFormat="true"/>
+        <Copy SourceFiles="$(ModsPath)$(ModOutputFolder)\$(MSBuildProjectName).pck"
+              DestinationFolder="$(GodotModsPath)/$(ModOutputFolder)/"
+              Condition="'$(CopyToGodotMods)' == 'true'"/>
+    </Target>
+
+    <Target Name="GodotPublishSkipped" AfterTargets="Publish"
+            Condition="Exists('$(MSBuildProjectName).json') and ('$(GodotPath)' == '' or !Exists('$(GodotPath)'))">
+        <Message Text="Skipping Godot .pck export because GodotPath is not configured." Importance="high"/>
+    </Target>
+</Project>

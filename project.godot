@@ -28,7 +28,7 @@ config/windows_native_icon="res://images/icon.ico"
 
 [autoload]
 
-RuntimeBootstrap="*res://editor/RegistrationBootstrap/RuntimeBootstrap.cs"
+RuntimeBootstrap="*res://editor/GameRegistrationBootstrap/RuntimeBootstrap.cs"
 FmodManager="*res://addons/fmod/FmodManager.gd"
 
 [debug]
@@ -63,7 +63,7 @@ text_editor/behavior/indent/size=4
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://editor/RegistrationBootstrap/plugin.cfg", "res://addons/atlas_generator/plugin.cfg", "res://addons/dev_tools/plugin.cfg", "res://addons/fmod/plugin.cfg", "res://addons/mega_text/plugin.cfg", "res://addons/megacontentcreator/plugin.cfg")
+enabled=PackedStringArray("res://editor/GameRegistrationBootstrap/plugin.cfg", "res://addons/atlas_generator/plugin.cfg", "res://addons/dev_tools/plugin.cfg", "res://addons/fmod/plugin.cfg", "res://addons/mega_text/plugin.cfg", "res://addons/megacontentcreator/plugin.cfg")
 
 [filesystem]
 

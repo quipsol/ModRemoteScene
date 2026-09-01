@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://dxal3c67uyej4"]
+
+[ext_resource type="Texture2D" uid="uid://yfqed28exa1a" path="res://ModRemoteScene/mod_image.png" id="1_64xoa"]
+[ext_resource type="Script" uid="uid://dtfio45agppyj" path="res://addons/mega_text/MegaLabel.cs" id="2_y6wb0"]
+
+[node name="Image" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+offset_right = 350.0
+offset_bottom = 350.0
+texture = ExtResource("1_64xoa")
+expand_mode = 1
+
+[node name="MegaLabel" type="Label" parent="."]
+layout_mode = 1
+offset_right = 350.0
+offset_bottom = 135.0
+theme_override_colors/font_color = Color(0.38039216, 1, 1, 1)
+theme_override_font_sizes/font_size = 99
+text = "Header"
+script = ExtResource("2_y6wb0")
+AutoSizeEnabled = true
+MinFontSize = 8
+MaxFontSize = 100
+metadata/_custom_type_script = "uid://dtfio45agppyj"

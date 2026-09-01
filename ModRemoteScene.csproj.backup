@@ -49,6 +49,4 @@
         <!--<GodotResourceFiles Include="ModRemoteScene/**"/>-->
     </ItemGroup>
   
-    <!--    This line re appears for me all the time (including the Nuget package)    -->
-    <Import Project="addons/sentry/dotnet/Sentry.Godot.props" Condition="Exists('addons/sentry/dotnet/Sentry.Godot.props')" />
 </Project>

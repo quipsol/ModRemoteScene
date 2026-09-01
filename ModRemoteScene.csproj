@@ -23,6 +23,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="ModRemoteSceneCode\Examples\NImage.cs" />
         <Content Include="local.props.example"/>
         <Content Include="project.godot"/>
         <AdditionalFiles Include="ModRemoteScene/localization/**/*.json"/> <!-- Used by analyzer -->

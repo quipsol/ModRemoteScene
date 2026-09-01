@@ -1,4 +1,9 @@
-﻿namespace ModRemoteScene.ModRemoteSceneCode.Examples;
+﻿using BaseLib.Utils;
+using MegaCrit.Sts2.Core.Assets;
+using MegaCrit.Sts2.Core.Helpers;
+using MegaCrit.Sts2.Core.Nodes.Cards;
+
+namespace ModRemoteScene.Examples;
 
 
 /// <summary>
@@ -6,5 +11,10 @@
 /// </summary>
 public class AddModImageToAllCards
 {
-    
+    private static AddedNode<NCard, NImage> imageOnCard = new AddedNode<NCard, NImage>(nCard =>
+    {
+        var nImage = PreloadManager.Cache.GetScene("res://ModRemoteScene/image.tscn").Instantiate<NImage>();
+        nCard.AddChildSafely(nImage);
+        return nImage;
+    });
 }

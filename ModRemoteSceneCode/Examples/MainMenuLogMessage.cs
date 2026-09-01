@@ -2,7 +2,7 @@
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Nodes.Screens.MainMenu;
 
-namespace ModRemoteScene.ModRemoteSceneCode.Examples;
+namespace ModRemoteScene.Examples;
 
 /// <summary>
 /// Example of logs showing in the Editor.

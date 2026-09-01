@@ -33,7 +33,7 @@
         <Compile Remove="ModRemoteScene/**"/>
         <Compile Include="GModRemoteSceneCode/**/*.cs"/>
 
-        <!-- If TOOLS is not defined we want to include the "editor" folder -->
+        <!-- If TOOLS is not defined we want to exclude the "editor" folder from being shipped -->
         <Compile Condition="$(DefineConstants.Contains('TOOLS')) == 'true'" Include="editor\**\*.cs" />
         <Compile Condition="$(DefineConstants.Contains('TOOLS')) == 'false'" Remove="editor\**\*.cs" />
 

@@ -1,12 +1,37 @@
-.godot/
-bin/
-/android/
+# general project ignores
 .git/
+.godot/
 .idea/
 .vs/
+bin/
+/android/
 publish/
 Properties/
 packages/
-.editorconfig
 *.user
-Directory.Build.props
+local.props
+
+# Decomp ignores (Symlinks/Copies)
+/addons/
+/animations/
+/banks/
+/debug_audio/
+/fonts/
+/images/
+/localization/
+/materials/
+/models/
+/scenes/
+/shaders/
+/src/
+/themes/
+--*
+default_bus_layout.tres
+
+# Just-in-case safety ignores (These files should never end up in your git anyway)
+**/sts2.dll
+**/SlayTheSpire2.pck
+**/sts2.xml
+# the two most common modding libraries
+**/BaseLib.dll
+**/STS2-RitsuLib.dll

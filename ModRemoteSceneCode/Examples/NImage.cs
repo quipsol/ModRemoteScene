@@ -2,7 +2,4 @@
 
 namespace ModRemoteScene.Examples;
 
-public partial class NImage : Control
-{
-    
-}
+public partial class NImage : Control { }

@@ -1,7 +1,5 @@
 extends SceneTree
 
-const MOD_NAME: String = "ModRemoteScene"
-
 const SKIP_EXTENSIONS: Array[String] = [
 	".png", ".jpg", ".jpeg", ".webp", ".bmp", ".svg", ".tga",
 	".ogg", ".mp3", ".wav",
@@ -37,12 +35,8 @@ func _init() -> void:
 		var mod_folder: String = _strip_folder_name(raw_folder)
 		print("Packing folder: res://" + mod_folder)
 		_pack_folder_recursive(packer, "res://" + mod_folder)
-
-	# Pack C# script .uid files from GameEditorTestCode/ so their uid:// ids
-	# resolve at runtime. The scripts live outside the asset folder, so the pass
-	# above never sees their .uid files.
-	print("Packing C# .uid files from: res://" + MOD_NAME + "Code")
-	_pack_cs_uid_files_recursive(packer, "res://" + MOD_NAME + "Code")
+		print("Packing C# .uid files: res://" + mod_folder + "Code")
+		_pack_cs_uid_files_recursive(packer, "res://" + mod_folder + "Code")
 
 	err = packer.flush(true)
 	if err == OK:
@@ -116,7 +110,11 @@ func _pack_cs_uid_files_recursive(packer: PCKPacker, path: String) -> void:
 
 		if dir.current_is_dir():
 			_pack_cs_uid_files_recursive(packer, full_path)
-		elif file_name.ends_with(".cs.uid"):
+		# The ".cs" files are not needed and can be removed.
+		# However, when loading your mod in the editor outside of its own project,
+		# not having them can cause issues when looking through the remote scene.
+		# So including them is more of a nice thing for other people and of no benefit to you
+		elif file_name.ends_with(".cs.uid") or file_name.ends_with(".cs"):
 			var err: int = packer.add_file(full_path, full_path)
 			if err != OK:
 				printerr("Failed to pack C# uid file: ", full_path)

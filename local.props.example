@@ -15,7 +15,7 @@
         <LocalBaseLibPath>$(ModsPath)\BaseLib\BaseLib.dll</LocalBaseLibPath>
         <WorkshopBaseLibPath>$(Sts2WorkshopDir)/3737335127/BaseLib/BaseLib.dll</WorkshopBaseLibPath>
 
-        <!-- Should the files be copies into the mods folder the Godot editor will read?    -->
+        <!-- Should the files be copies into the mods folder the Godot editor-player will read?    -->
         <CopyToGodotMods>true</CopyToGodotMods>
 
     </PropertyGroup>

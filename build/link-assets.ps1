@@ -1,8 +1,6 @@
 param([switch]$Force)
 $ErrorActionPreference = "Stop"
 
-# This script lives in build/, but local.props and the symlink targets
-# (src, images, etc.) live at the project root — one level up.
 $ProjectRoot = Split-Path $PSScriptRoot -Parent
 Set-Location $ProjectRoot
 

@@ -10,9 +10,8 @@ namespace ModRemoteScene.editor.GameRegistrationBootstrap;
 /// </para>
 /// <para>
 /// The game calls Module.GetTypes() on the mod assembly at load time, which throws <c>ReflectionTypeLoadException</c>
-/// if any type fails to resolve. -> Do not use anything from <c>GodotSharpEditor.dll</c>
+/// if any type fails to resolve. -> Do not use anything from <c>GodotSharpEditor.dll</c>. It is not shipped with the game!
 /// </para>
 /// </summary>
 [Tool]
 public partial class EditorBootstrap : RefCounted { }
-// The editor folder is now excluded on build so "GodotSharpEditor.dll" should in theory not be an issue anymore.

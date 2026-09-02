@@ -23,7 +23,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="ModRemoteSceneCode\Examples\NImage.cs" />
         <Content Include="local.props.example"/>
         <Content Include="project.godot"/>
         <AdditionalFiles Include="ModRemoteScene/localization/**/*.json"/> <!-- Used by analyzer -->
@@ -32,14 +31,14 @@
         <Compile Remove="addons\**"/>
         <Compile Remove="src\**"/>
         <Compile Remove="ModRemoteScene/**"/>
-        <Compile Include="GModRemoteSceneCode/**/*.cs"/>
+        <Compile Include="ModRemoteSceneCode/**/*.cs"/>
 
         <!-- If TOOLS is not defined we want to exclude the "editor" folder from being shipped -->
         <Compile Condition="$(DefineConstants.Contains('TOOLS')) == 'true'" Include="editor\**\*.cs" />
         <Compile Condition="$(DefineConstants.Contains('TOOLS')) == 'false'" Remove="editor\**\*.cs" />
 
         <None Include="ModRemoteScene/**"/>
-        <None Include="ModRemoteSceneCode/**"/>
+        <None Include="ModRemoteSceneCode/**"/> <!--Exclude="ModRemoteSceneCode/**/*.cs"-->
         <None Include="build/**"/>
         <None Include="editor/**"/>
         <None Include="ModRemoteScene.json"/>
@@ -49,7 +48,23 @@
         <PackageReference Update="Alchyr.Sts2.ModAnalyzers" Version="0.1.9" />
         <!--<GodotResourceFiles Include="ModRemoteScene/**"/>-->
     </ItemGroup>
-  
-    <!--    This line re appears for me all the time (including the Nuget package)    -->
+    <Target Name="CheckDependencyPaths">
+        <Error Text=" Slay the Spire 2 data not found at path '$(Sts2DataDir)'" Condition="'$(Sts2DataDir)' == '' or !Exists('$(Sts2DataDir)')" />
+    </Target>
+
+
+    <Target Name="GodotImport" BeforeTargets="GodotPublish"
+            Condition="'$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(SkipGodotImport)' != 'true'">
+        <Exec Command="&quot;$(GodotPath)&quot; --headless --audio-driver Dummy --path &quot;$(MSBuildProjectDirectory)&quot; --import --quit --extra-args --no-window"
+              EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1;Configuration=$(Configuration)"
+              IgnoreExitCode="true"
+              IgnoreStandardErrorWarningFormat="true"/>
+    </Target>
+    <!--    The Sentry addon auto-injects this import; We need the dll in the debug folder but this package takes priority and prohibits it.
+            Option 1: Leave the auto import and manually add Sentry.dll to the folder (Can be found in the games installation directory)
+            Option 2: Immediately remove the Package again, so the reference settings in mod.build.props take over-->
     <Import Project="addons/sentry/dotnet/Sentry.Godot.props" Condition="Exists('addons/sentry/dotnet/Sentry.Godot.props')" />
+    <ItemGroup>
+        <PackageReference Remove="Sentry"/>
+    </ItemGroup>
 </Project>

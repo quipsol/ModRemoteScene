@@ -9,8 +9,9 @@
         <Error Text=" Slay the Spire 2 data not found at path '$(Sts2DataDir)'" Condition="'$(Sts2DataDir)' == '' or !Exists('$(Sts2DataDir)')" />
     </Target>
     
+    <!--    Does not copy while in Debug Configuration as that contains the editor folder    -->
     <Target Name="CopyToStsModsFolderOnBuild" AfterTargets="PostBuildEvent"
-            Condition="Exists('$(MSBuildProjectName).json')">
+            Condition="Exists('$(MSBuildProjectName).json') and '$(Configuration)' != 'Debug'">
         <Message Text="Copying .dll and manifest to the games mods folder." Importance="high"/>
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)$(ModOutputFolder)/"/>
         <Copy SourceFiles="$(MSBuildProjectName).json" DestinationFolder="$(ModsPath)$(ModOutputFolder)/"/>

@@ -159,24 +159,30 @@
             <Private Condition="'$(Configuration)' == 'Debug'">true</Private>
             <Private Condition="'$(Configuration)' != 'Debug'">false</Private>
         </Reference>
+        
+        <!--    These should be auto-included when sts2 is    -->
 <!--        <Reference Include="SmartFormat">-->
 <!--            <HintPath>$(Sts2DataDir)/SmartFormat.dll</HintPath>-->
+<!--            <Private Condition="'$(Configuration)' == 'Debug'">true</Private>-->
+<!--            <Private Condition="'$(Configuration)' != 'Debug'">false</Private>-->
 <!--        </Reference>-->
 <!--        <Reference Include="Steamworks.NET">-->
 <!--            <HintPath>$(Sts2DataDir)/Steamworks.NET.dll</HintPath>-->
+<!--            <Private Condition="'$(Configuration)' == 'Debug'">true</Private>-->
+<!--            <Private Condition="'$(Configuration)' != 'Debug'">false</Private>-->
 <!--        </Reference>-->
     </ItemGroup>
 
     <ItemGroup Condition="'$(UseLocalBaseLib)' == 'true'">
         <Reference Include="BaseLib">
             <HintPath>$(LocalBaseLibPath)</HintPath>
-            <Private>true</Private>
+            <Private>false</Private>
         </Reference>
     </ItemGroup>
     <ItemGroup Condition="'$(UseLocalBaseLib)' != 'true' and '$(UseWorkshopBaseLib)' == 'true' and Exists('$(Sts2WorkshopDir)')">
         <Reference Include="BaseLib">
             <HintPath>$(WorkshopBaseLibPath)</HintPath>
-            <Private>true</Private>
+            <Private>false</Private>
         </Reference>
     </ItemGroup>
     <ItemGroup Condition="'$(UseLocalBaseLib)' != 'true' and '$(UseWorkshopBaseLib)' != 'true'">

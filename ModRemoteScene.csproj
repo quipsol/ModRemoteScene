@@ -44,6 +44,8 @@
         <None Include="ModRemoteScene.json"/>
         <None Include="local.props"/>
         <None Include=".gitignore"/>
+        
+        <None Remove=".examples/**"/>
 
         <PackageReference Update="Alchyr.Sts2.ModAnalyzers" Version="0.1.9" />
         <!--<GodotResourceFiles Include="ModRemoteScene/**"/>-->

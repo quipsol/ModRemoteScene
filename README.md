@@ -1,10 +1,25 @@
 ## Example Project for running your Mod via the Godot Editor-Player
 
-Running your mod in the Editor-Player can help visualize and understand the relation of your Scenes, as well as Nodes you added to base game scenes.
+Running your mod in the Editor-Player can help visualize and understand the relation of your Scenes, as well as those of Nodes you added to base game scenes.
 
-Unfortunately this is not a project that runs out of the box, as it requires direct access to the games files which I won't upload.
+Unfortunately the example project does not run out of the box, as it requires direct access to the games files which I won't upload.
 
-*This is based on [Lamali](https://github.com/lamali292)'s Symlink setup (see [Downfall](https://github.com/lamali292/Downfall) as an example)*
+*This is build upon [Lamali](https://github.com/lamali292)'s Symlink setup (see [Downfall](https://github.com/lamali292/Downfall) as an example)*
+
+Side effects of this include:
+ - Working addons (e.g. Being able to choose MegaLabels in the add node screen and seeing their properties in the Inspector)
+ - Working Tools (e.g. The background asset picker for Act backgrounds to visualize them in the editor)
+
+---
+
+#### Table of content
+
+- [Getting this Project to run](#getting-this-project-to-run)
+- [Setting up your own Project](#setting-up-your-own-project)
+- [Important](#Important)
+- [Issues](#Issues)
+- [Examples](#Examples)
+
 
 ---
 
@@ -59,3 +74,59 @@ Setting up your own project is very similar:
 
 5. Create a `local.prop` file in your root and fill it in similar to the example file.
 6. Follow from step 3 above.
+
+#### Make sure your gitignore is properly configured (or whichever vcs you use)
+
+
+---
+
+## Important
+
+There are three configurations: `Debug`, `ExportDebug` and `ExportRelease`
+
+The Editor uses the `Debug` configuration. Code is set up so that a build in `Debug` does NOT copy the file into the games mods directory. This is because it includes the editor folder. Instead, use one of the other configurations if you want to export to the actual game.
+
+`MainFile.cs` makes use of the `TOOLS` preprocessor directive to prevent errors/warning that would otherwhise happen if the editor tries to load the scripts again. Changing between configurations will include/exclude it.
+
+`Debug`
+
+![ERROR](.examples/config_debug.png)
+
+`ExportDebug` | `ExportRelease`
+
+![ERROR](.examples/config_export.png)
+
+---
+
+## Issues
+
+This solution is not perfect. Notable issues:
+ - It always loads from the same mod directory. So if you use this with multiple projects you either have to accept that it loads all of them or add/remove mods from the directory. (Or install multiple godot installations since the directory is relative to the godot exe)
+ - You can load other mods in the editor (important for dependencies) and see their nodes in the remote tree. However, clicking on any of them will likely spam the console with resource not found errors. They are harmless but annoying.<br/>
+   The Editor and Editor-Player awareness of resources are different. And the godot engine directly prohibits mounting pck files in the editor. <br/>
+   If you must see these files, you could extract them from the mod via GDRE and temporarely add them into your project. (Untested but should work) <br/>
+   You can click on all Nodes from your mod or the base game.
+ - MegaLabels have a safeguard that throws an error if no `font` (`normal_font` for MegaRichTextLabel) is set. The explanation for why is inside the addons code in the decomp. This is also harmless.
+ - The game makes a few different decisions based on if it runs in the editor-player or not. They don't matter as long as your mod doesn't depend on them. (see `editor/IsEditorPatches` for an important BaseLib example)
+
+---
+
+### Examples
+
+
+Looking at the card node in the hand with the AddedNode from the example mod. <br/>
+*Note how we can see the Texture because its reference is local*
+
+![Error](.examples/added_node_example_image.png)
+
+Loading the mod [Into the Spireverse](https://steamcommunity.com/sharedfiles/filedetails/?id=3747503080) and looking at the cargo pile in the remote tree. <br/>
+*Note how we can't see the Texture because there is no local reference.*<br/>
+*This also spams the afformentioned errors because this is the example project and not the SpireVerse project*
+
+![Error](.examples/cargo_pile_in_remote_tree.png)
+
+
+Using the editor-player to visualize the relation of a node added to the card.tscn, and modifying the scene during play to see the changes live. <br/>
+*This does confuse the editor-player. I highly recommend that after modifying the scene, you save and reload the project to avoid any inconsistencies.*
+
+![Error](.examples/place_added_nodes_with_visuals.gif)

@@ -84,7 +84,7 @@ Setting up your own project is very similar:
 
 There are three configurations: `Debug`, `ExportDebug` and `ExportRelease`
 
-The Editor uses the `Debug` configuration. Code is set up so that a build in `Debug` does NOT copy the file into the games mods directory. This is because it includes the editor folder. Instead, use one of the other configurations if you want to export to the actual game.
+The Editor uses the `Debug` configuration. The example project (through the `mod.build.targets` file) is set up so that a build in `Debug` does NOT copy the file into the games mods directory. This is because it includes the editor folder. Instead, use one of the other configurations if you want to export to the actual game.
 
 `MainFile.cs` makes use of the `TOOLS` preprocessor directive to prevent errors/warning that would otherwhise happen if the editor tries to load the scripts again. Changing between configurations will include/exclude it.
 

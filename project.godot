@@ -15,7 +15,7 @@ General/banks_path="res://banks/desktop"
 
 [application]
 
-config/name="Slay the Spire 2"
+config/name="Mod Remote Scene"
 run/main_scene="res://scenes/game.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="SlayTheSpire2"

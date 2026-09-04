@@ -1,4 +1,4 @@
-## Example Project for running your Mod via the Godot Editor-Player
+## Example Project for running your Slay the Spire 2 Mod via the Godot Editor-Player
 
 Running your mod in the Editor-Player can help visualize and understand the relation of your Scenes, as well as those of Nodes you added to base game scenes.
 

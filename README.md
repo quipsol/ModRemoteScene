@@ -56,26 +56,30 @@ Please note that as long as the editor is open: Due to the above set Debug setti
 
 Setting up your own project is very similar:
 
+Update: Only follow step 1-4. After that you can run `editor/GameRegistrationBootstrap/import-assets.ps1` to auto import the rest (including modifying the project.godot). The powershell script can be run with `-Debug` for more log info. <br/>
+*`project.godot` will be replaced by this! If you made custom changes to it, save them somewhere else first and then readd them to the final file.*
+
+**Full instructions left up as a list of all changes being done or if you want to do it manually.**
+
 1. Use [GDRE Tools](https://github.com/GDRETools/gdsdecomp/releases) to extract the games assets.
 2. Copy both the `build` and `editor` folders into your project. <br/>
     I recommend reading through all the files. (even if you just skim over them)
 3. In your mods `csproj` import `mod.build.props` and `mod.build.targets`. At the bottom of it, copy the Sentry addon logic from the example mod. <br/>
    Besides the Sentry fuckery, the example project only has a single `PropertryGroup`and `ItemGroup` in it.
-4. Replace your `project.godot` file with the one from the example or the decomp. <br/>
+4. Create a `local.prop` file in your root and fill it in similar to the example file.
+5. Replace your `project.godot` file with the one from the example or the decomp. <br/>
    If you copied the file from the example, change the following: <br/>
    1. Under `[application]` change `config/name` to your mod name.
    2. Under `[dotnet]` change the `project/assembly_name` to your mods. <br/>
    
    If you instead copied the file from the decomp, also change this:
    1. Add this at the top of `[autoload]`: `RuntimeBootstrap="*res://editor/GameRegistrationBootstrap/RuntimeBootstrap.cs"`
-   2. Under `[dotnet]` remove `project/solution_directory`.
-   3. Under `[editor_plugins]` edit `enabled` by adding `"res://editor/GameRegistrationBootstrap/plugin.cfg" as the **first** entry.
+   2. Under `[autoload]` remove the `SentryBootstrap` line
+   3. Under `[dotnet]` remove `project/solution_directory`.
+   3. Under `[editor_plugins]` edit `enabled` by adding `"res://editor/GameRegistrationBootstrap/plugin.cfg"` as the **first** entry.
    4. Under `[Sentry]` remove `config/dsn` and set `config/disable_in_editor` to `true`
-
-5. Create a `local.prop` file in your root and fill it in similar to the example file.
 6. Follow from step 3 above.
 
-#### Make sure your gitignore is properly configured (or whichever vcs you use)
 
 
 ---

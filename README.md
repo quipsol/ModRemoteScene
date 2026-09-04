@@ -56,7 +56,9 @@ Please note that as long as the editor is open: Due to the above set Debug setti
 
 Setting up your own project is very similar:
 
-Update: Only follow step 1-4. After that you can run `editor/GameRegistrationBootstrap/import-assets.ps1` to auto import the rest (including modifying the project.godot). The powershell script can be run with `-Debug` for more log info. <br/>
+Update: Only follow step 1-4.<br/>
+Then run `build\link-assets.ps1` to symlink the decompiled game folders.
+After that you can run `editor/GameRegistrationBootstrap/import-assets.ps1` to auto import the rest (including modifying the project.godot). The powershell script can be run with `-Debug` for more log info. <br/>
 *`project.godot` will be replaced by this! If you made custom changes to it, save them somewhere else first and then readd them to the final file.*
 
 **Full instructions left up as a list of all changes being done or if you want to do it manually.**

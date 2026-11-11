@@ -1,6 +1,7 @@
 ## Example Project for running your Slay the Spire 2 Mod via the Godot Editor-Player
 
-Doing it this way still works, but I made a Godot fork that can also do this, so you don't have to maintain the code in your project: [MoDot](https://github.com/quipsol/godot_4.5.1_sts2_modding/wiki)
+>[!Note]
+>Doing it this way still works, but I made a Godot fork for it, so you don't have to maintain the code in your project: [MoDot](https://github.com/quipsol/godot_4.5.1_sts2_modding/wiki)
 
 ---
 

@@ -1,5 +1,9 @@
 ## Example Project for running your Slay the Spire 2 Mod via the Godot Editor-Player
 
+Doing it this way still works, but I made a Godot fork that can also do this, so you don't have to maintain the code in your project: [MoDot](https://github.com/quipsol/godot_4.5.1_sts2_modding/wiki)
+
+---
+
 Running your mod in the Editor-Player can help visualize and understand the relation of your Scenes, as well as those of Nodes you added to base game scenes.
 
 Unfortunately the example project does not run out of the box, as it requires direct access to the games files which I won't upload.
